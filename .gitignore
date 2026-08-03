@@ -1,2 +1,19 @@
+# Private keys / personal files
 y
 y.pub
+
+# Compiled executables and build artifacts
+*.o
+*.obj
+*.out
+*.exe
+assignment_*/driver/driver
+common_wrapper/wrapper
+
+# Editor / OS noise
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
