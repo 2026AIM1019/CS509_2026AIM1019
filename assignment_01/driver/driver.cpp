@@ -73,9 +73,20 @@ static string runSolution(istream& in) {
         for (int j = 0; j < r; ++j)
             in >> B[i][j];
 
-// --- Call both GEMM implementations from src/matmul.h ---
-    vector<vector<int>> C_simple  = gemmSimple(A, B);
+// --- Time complexity of Simple GEMM (separate measurement) ---
+    // Theoretical: O(M * N * K)  (M rows of A, K inner dim, N cols of B)
+    auto t0 = high_resolution_clock::now();
+    vector<vector<int>> C_simple = gemmSimple(A, B);
+    auto t1 = high_resolution_clock::now();
+    double simpleMicros = duration<double, micro>(t1 - t0).count();
+
+    // --- Time complexity of Blocked GEMM (separate measurement) ---
+    // Theoretical: O(M * N * K) as well, but with better cache locality
+    // (fewer cache misses), so the empirical time is usually lower.
+    auto t2 = high_resolution_clock::now();
     vector<vector<int>> C_blocked = gemmBlocked(A, B);
+    auto t3 = high_resolution_clock::now();
+    double blockedMicros = duration<double, micro>(t3 - t2).count();
 
     // --- Verify both implementations produce the same result ---
     bool match = (C_simple == C_blocked);
@@ -83,12 +94,16 @@ static string runSolution(istream& in) {
         return string("MISMATCH: Simple and Blocked GEMM differ");
     }
 
+    // --- Report the measured time of each algorithm separately ---
+    cout << "         Simple  GEMM time: " << fixed << setprecision(2) << simpleMicros << " us\n"
+         << "         Blocked GEMM time: " << fixed << setprecision(2) << blockedMicros << " us\n";
+
     // --- Format the result matrix as a string ---
     // One row per line, elements separated by spaces.
     string out;
     for (int i = 0; i < p; ++i) {
         for (int j = 0; j < r; ++j) {
-if (j > 0) out += ' ';
+            if (j > 0) out += ' ';
             out += to_string(C_blocked[i][j]);
         }
         out += '\n';
