@@ -1,25 +1,3 @@
-// ============================================================================
-// LeetCode-style test driver
-// ----------------------------------------------------------------------------
-// How it works:
-//   1. Scans tests/inputs/ for all *.txt files (test cases are auto-detected,
-//      no "number of test cases" header required).
-//   2. For each input file "test_N.txt", reads the matching expected output
-//      from tests/outputs/test_N.txt.
-//   3. Runs your solution function, measures the time taken (microseconds).
-//   4. Compares the actual output with the expected output and prints
-//      PASSED / FAILED for each test, followed by a summary.
-//
-// Where to put your solution:
-//   Implement your function in ../src/ (e.g. add.cpp) and declare it in the
-//   header. Then edit runSolution() below to parse the test-case input and
-//   call your function. Everything else in this file can stay unchanged.
-//
-// Build & run (from the assignment_01/ folder):
-//   g++ -O2 -std=c++17 driver/driver.cpp src/add.cpp -o driver/driver
-//   ./driver/driver
-// ============================================================================
-
 #include <algorithm>
 #include <chrono>
 #include <filesystem>
@@ -36,9 +14,6 @@ namespace fs = filesystem;
 
 #include "../src/matmul.h"
 
-// ----------------------------------------------------------------------------
-// Utility: strip leading/trailing whitespace from a string.
-// ----------------------------------------------------------------------------
 static string trim(const string& s) {
     size_t b = s.find_first_not_of(" \t\r\n");
     if (b == string::npos) return "";
@@ -46,20 +21,9 @@ static string trim(const string& s) {
     return s.substr(b, e - b + 1);
 }
 
-// ----------------------------------------------------------------------------
-// runSolution(): the ONLY function you normally need to edit.
-//
-// `in` is a stream containing one test case's input (from tests/inputs/).
-// Read the arguments from it, call your solution, and return the result
-// formatted as a string. The returned string is compared against the
-// expected output file (after trimming whitespace).
-// ----------------------------------------------------------------------------
+
 static string runSolution(istream& in) {
-    // --- Parse matrix multiplication inputs ---
-    // Input format:
-    //   p q r
-    //   A (p rows, q integers each)
-    //   B (q rows, r integers each)
+
     int p, q, r;
     in >> p >> q >> r;
 
@@ -73,52 +37,52 @@ static string runSolution(istream& in) {
         for (int j = 0; j < r; ++j)
             in >> B[i][j];
 
-// --- Time complexity of Simple GEMM (separate measurement) ---
-    // Theoretical: O(M * N * K)  (M rows of A, K inner dim, N cols of B)
     auto t0 = high_resolution_clock::now();
     vector<vector<int>> C_simple = gemmSimple(A, B);
     auto t1 = high_resolution_clock::now();
-    double simpleMicros = duration<double, micro>(t1 - t0).count();
+    double simpleMillis = duration<double, milli>(t1 - t0).count();
 
-    // --- Time complexity of Blocked GEMM (separate measurement) ---
-    // Theoretical: O(M * N * K) as well, but with better cache locality
-    // (fewer cache misses), so the empirical time is usually lower.
+
     auto t2 = high_resolution_clock::now();
     vector<vector<int>> C_blocked = gemmBlocked(A, B);
     auto t3 = high_resolution_clock::now();
-    double blockedMicros = duration<double, micro>(t3 - t2).count();
+    double blockedMillis = duration<double, milli>(t3 - t2).count();
 
-    // --- Verify both implementations produce the same result ---
+   
     bool match = (C_simple == C_blocked);
     if (!match) {
         return string("MISMATCH: Simple and Blocked GEMM differ");
     }
 
-    // --- Report the measured time of each algorithm separately ---
-    cout << "         Simple  GEMM time: " << fixed << setprecision(2) << simpleMicros << " us\n"
-         << "         Blocked GEMM time: " << fixed << setprecision(2) << blockedMicros << " us\n";
-
-    // --- Format the result matrix as a string ---
-    // One row per line, elements separated by spaces.
-    string out;
+   
+    string matrixStr;
     for (int i = 0; i < p; ++i) {
         for (int j = 0; j < r; ++j) {
-            if (j > 0) out += ' ';
-            out += to_string(C_blocked[i][j]);
+            if (j > 0) matrixStr += ' ';
+            matrixStr += to_string(C_blocked[i][j]);
         }
-        out += '\n';
+        matrixStr += '\n';
     }
-    return out;
+
+ 
+    cout << "Algorithm: GEMM Simple\n"
+         << "Result matrix:\n"
+         << matrixStr
+         << "Execution time: " << fixed << setprecision(2) << simpleMillis << " ms\n"
+         << "\n"
+         << "Algorithm: GEMM Blocking\n"
+         << "Result matrix:\n"
+         << matrixStr
+         << "Execution time: " << fixed << setprecision(2) << blockedMillis << " ms\n";
+
+    return matrixStr;
 }
 
-// ----------------------------------------------------------------------------
-// Driver: scan tests, run each case, print results.
-// ----------------------------------------------------------------------------
 int main() {
-    const string inputDir  = "tests/inputs";    // folder with test inputs
-    const string outputDir = "tests/outputs";   // folder with expected outputs
+    const string inputDir  = "tests/inputs";    
+    const string outputDir = "tests/outputs";  
 
-    // --- 1. Auto-discover every *.txt input file ---------------------------
+  
     vector<string> testFiles;
     if (fs::exists(inputDir)) {
         for (const auto& entry : fs::directory_iterator(inputDir)) {
@@ -180,14 +144,10 @@ int main() {
         cout << "[" << (i + 1) << "/" << testFiles.size() << "] "
              << setw(12) << left << name << " -> "
              << (ok ? "PASSED" : "FAILED")
-            //  << "   (Input: " << trim(inBuf.str())
-            //  << " | Expected: \n" << expected
-            //  << " | Got: \n" << actual
              << " | Time: " << fixed << setprecision(2)
              << micros << " us)\n";
     }
 
-    // --- 3. Summary ---------------------------------------------------------
     cout << "\n================ SUMMARY ================\n"
          << "Total Tests : " << testFiles.size() << "\n"
          << "Passed      : " << passed << "\n"
