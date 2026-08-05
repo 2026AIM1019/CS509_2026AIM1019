@@ -6,14 +6,12 @@ vector<vector<int>> gemmSimple(
     const vector<vector<int>>& A,
     const vector<vector<int>>& B) {
 
-    int M = A.size();                 // rows of A
-    int K = B.size();                 // cols of A == rows of B
-    int N = B[0].size();              // cols of B
+    int M = A.size();                 
+    int K = B.size();                
+    int N = B[0].size();         
 
-    // Result is M x N, initialized to zeros.
     vector<vector<int>> C(M, vector<int>(N, 0));
 
-    // Simple triple-loop matrix multiplication.
     for (int i = 0; i < M; ++i) {
         for (int j = 0; j < N; ++j) {
             for (int k = 0; k < K; ++k) {
@@ -30,16 +28,16 @@ vector<vector<int>> gemmBlocked(
     const vector<vector<int>>& A,
     const vector<vector<int>>& B) {
 
-    const int BLOCK = 32;             // tile size
+    const int BLOCK = 32;             
 
-    int M = A.size();                 // rows of A
-    int K = B.size();                 // cols of A == rows of B
-    int N = B[0].size();              // cols of B
+    int M = A.size();                
+    int K = B.size();               
+    int N = B[0].size();        
 
-    // Result is M x N, initialized to zeros.
+   
     vector<vector<int>> C(M, vector<int>(N, 0));
 
-    // Tiled matrix multiplication.
+  
     for (int i0 = 0; i0 < M; i0 += BLOCK) {
         for (int j0 = 0; j0 < N; j0 += BLOCK) {
             for (int k0 = 0; k0 < K; k0 += BLOCK) {
