@@ -33,7 +33,7 @@ void writeBellmanFordOutput(const string &filename,
 
     if (result.negativeCycle)
     {
-        fout << "Negative cycle: true\n";
+        fout << "Negative cycle\n";
         return;
     }
 
@@ -46,7 +46,7 @@ void writeBellmanFordOutput(const string &filename,
         fout << "\n";
     }
 
-    fout << "Negative cycle: none\n";
+    fout << "Negative cycle\n";
 }
 
 void writeFloydWarshallOutput(const string &filename,
@@ -61,7 +61,7 @@ void writeFloydWarshallOutput(const string &filename,
 
     if (result.negativeCycle)
     {
-        fout << "Negative cycle: true\n";
+        fout << "Negative cycle\n";
         return;
     }
 
@@ -80,5 +80,5 @@ void writeFloydWarshallOutput(const string &filename,
         fout << "\n";
     }
 
-    fout << "Negative cycle: none\n";
+    fout << "Negative cycle\n";
 }
