@@ -1,3 +1,0 @@
-Algorithm: Bellman-Ford
-Source: 0
-Negative cycle: true
