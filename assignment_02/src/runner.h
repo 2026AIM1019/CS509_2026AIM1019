@@ -12,7 +12,6 @@ void runAlgorithm(
     const string &algorithmName,
     function<double(const CSRGraph &, int, const string &)> executor);
 
-
 void runBellmanFord();
 void runFloydWarshall();
 

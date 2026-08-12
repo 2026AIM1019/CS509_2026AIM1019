@@ -19,6 +19,7 @@ namespace
     }
 }
 
+
 void writeBellmanFordOutput(const string &filename,
                             const BellmanFordResult &result,
                             int source)
@@ -33,7 +34,7 @@ void writeBellmanFordOutput(const string &filename,
 
     if (result.negativeCycle)
     {
-        fout << "Negative cycle\n";
+        fout << "Negative cycle: true\n";
         return;
     }
 
@@ -46,7 +47,7 @@ void writeBellmanFordOutput(const string &filename,
         fout << "\n";
     }
 
-    fout << "Negative cycle\n";
+    fout << "Negative cycle: none\n";
 }
 
 void writeFloydWarshallOutput(const string &filename,
@@ -61,7 +62,7 @@ void writeFloydWarshallOutput(const string &filename,
 
     if (result.negativeCycle)
     {
-        fout << "Negative cycle\n";
+        fout << "Negative cycle: true\n";
         return;
     }
 
@@ -80,5 +81,5 @@ void writeFloydWarshallOutput(const string &filename,
         fout << "\n";
     }
 
-    fout << "Negative cycle\n";
+    fout << "Negative cycle: none\n";
 }

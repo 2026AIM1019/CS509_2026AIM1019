@@ -53,7 +53,9 @@ namespace
 
     void printHeader(const string &algorithm)
     {
-        cout << "   " << algorithm << "Test Runner\n";
+        cout << "=========================================\n";
+        cout << "   " << algorithm << " Automatic Test Runner\n";
+        cout << "=========================================\n\n";
 
         cout << left
              << setw(20) << "Test File"
@@ -204,7 +206,6 @@ void runAlgorithm(
 
     printSummary(passed, failed);
 }
-
 
 void runBellmanFord()
 {

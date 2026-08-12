@@ -2,6 +2,9 @@
 
 This project implements:
 
+- Breadth First Search (BFS)
+- Depth First Search (DFS)
+- Single Source Shortest Path using Dijkstra
 - Bellman-Ford
 - Floyd-Warshall
 - CSR (Compressed Sparse Row) graph representation
@@ -41,6 +44,13 @@ For vertex `u`, its outgoing edges are:
 ```text
 for (i = row_ptr[u]; i < row_ptr[u + 1]; ++i)
 ```
+
+The existing CSR implementation is reused by:
+
+- BFS
+- DFS
+- Dijkstra
+- Bellman-Ford
 
 This is particularly appropriate for Bellman-Ford because it needs to scan
 all edges repeatedly.
@@ -394,6 +404,9 @@ src/runner.*
 
 ```text
 tests/
+├── bfs/
+├── dfs/
+├── sssp/
 ├── bellman_ford/
 │   ├── test_01.txt
 │   ├── test_02.txt
@@ -405,6 +418,9 @@ tests/
     └── test_100.txt
 
 outputs/
+├── bfs/
+├── dfs/
+├── sssp/
 ├── bellman_ford/
 │   ├── test_01.txt
 │   ├── test_02.txt
@@ -416,6 +432,9 @@ outputs/
     └── test_100.txt
 
 generated/
+├── bfs/
+├── dfs/
+├── sssp/
 ├── bellman_ford/
 └── floyd_warshall/
 ```
@@ -581,3 +600,79 @@ diff generated/bellman_ford/test_01.txt \
 An empty `diff` means the files are identical.
 
 ---
+
+# 14. Why CSR Is Used for Bellman-Ford but Not Directly for Floyd-Warshall
+
+Bellman-Ford repeatedly performs:
+
+```text
+for every edge (u, v, w)
+```
+
+CSR is therefore a natural representation:
+
+```text
+row_ptr
+    |
+    +----> beginning/end of u's edges
+
+col_idx
+    |
+    +----> destination vertices
+
+weights
+    |
+    +----> edge weights
+```
+
+Floyd-Warshall instead repeatedly needs:
+
+```text
+dist[i][k]
+dist[k][j]
+dist[i][j]
+```
+
+for every pair `(i, j)`.
+
+A dense matrix gives direct O(1) access to each of these values, so the
+assignment's matrix representation is the appropriate implementation.
+
+However, the matrix is converted to CSR after Floyd-Warshall specifically for
+the required Bellman-Ford cross-check. This allows the project to reuse the
+existing `Graph -> CSRGraph -> Bellman-Ford` pipeline rather than maintaining a
+second edge representation.
+
+---
+
+# 15. Overall Architecture
+
+```text
+                         Input
+                           |
+              +------------+------------+
+              |                         |
+              v                         v
+       Weighted List               Matrix
+              |                         |
+              v                         v
+           Graph                  MatrixGraph
+              |                         |
+              v                         |
+          CSRGraph                        |
+              |                         |
+      +-------+-------+                   |
+      |       |       |                   |
+      v       v       v                   v
+     BFS     DFS   Dijkstra        Floyd-Warshall
+                      |
+                      |
+              Bellman-Ford
+                      ^
+                      |
+              Matrix -> Graph -> CSR
+                 cross-check
+```
+
+This keeps the existing project architecture intact while adding the two new
+shortest-path algorithms required by the assignment.
