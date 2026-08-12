@@ -1,0 +1,12 @@
+Algorithm: Bellman-Ford
+Source: 2
+Vertex Distance
+0 INF
+1 INF
+2 0
+3 4
+4 6
+5 12
+6 10
+7 INF
+Negative cycle: none
