@@ -1,0 +1,2 @@
+Algorithm: Prim's MST
+Total MST weight: 2361751

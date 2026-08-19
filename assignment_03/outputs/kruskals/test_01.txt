@@ -1,0 +1,2 @@
+Algorithm: Kruskal's MST
+Total MST weight: 2037
