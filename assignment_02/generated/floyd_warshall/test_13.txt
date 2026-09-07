@@ -1,0 +1,2 @@
+Algorithm: Floyd-Warshall
+Negative cycle: true

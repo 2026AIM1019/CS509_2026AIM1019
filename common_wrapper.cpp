@@ -11,6 +11,7 @@ int main()
     std::cout << "1. Assignment 01\n";
     std::cout << "2. Assignment 02\n";
     std::cout << "3. Assignment 03\n";
+    std::cout << "4. Assignment 04\n";
     std::cout << "0. Exit\n";
     std::cout << "========================================\n";
 
@@ -38,6 +39,11 @@ int main()
         case 3:
             command = "cd assignment_03 && ./mst_driver";
             break;
+            
+        case 4:
+            command = "cd assignment_04 && ./a4_driver";
+            break;
+
 
         case 0:
             std::cout << "Exiting...\n";

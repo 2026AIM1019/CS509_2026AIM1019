@@ -1,0 +1,8 @@
+Algorithm: Floyd-Warshall
+Distance matrix:
+0 1 -1 1 2
+3 0 -2 0 1
+5 6 0 2 3
+3 4 2 0 1
+INF INF INF INF 0
+Negative cycle: none

@@ -6,6 +6,7 @@ WRAPPER := common_wrapper
 ASSIGNMENT_01 := assignment_01
 ASSIGNMENT_02 := assignment_02
 ASSIGNMENT_03 := assignment_03
+ASSIGNMENT_04 := assignment_04
 
 .PHONY: all
 all: build
@@ -30,6 +31,12 @@ build:
 	@echo " Building Assignment 03"
 	@echo "========================================"
 	$(MAKE) -C $(ASSIGNMENT_03)
+	
+	@echo ""
+	@echo "========================================"
+	@echo " Building Assignment 04"
+	@echo "========================================"
+	$(MAKE) -C $(ASSIGNMENT_04)
 
 	@echo ""
 	@echo "========================================"
@@ -58,6 +65,11 @@ assignment_02:
 .PHONY: assignment_03
 assignment_03:
 	$(MAKE) -C $(ASSIGNMENT_03)
+
+
+.PHONY: assignment_04
+assignment_04:
+	$(MAKE) -C $(ASSIGNMENT_04)
 
 
 
@@ -99,6 +111,16 @@ run03: assignment_03
 	cd $(ASSIGNMENT_03) && ./mst_driver
 
 
+.PHONY: run04
+run03: assignment_04
+	@echo ""
+	@echo "========================================"
+	@echo " Running Assignment 04"
+	@echo "========================================"
+	@echo ""
+	cd $(ASSIGNMENT_04) && ./a4_driver
+
+
 .PHONY: clean
 clean:
 	@echo ""
@@ -118,6 +140,12 @@ clean:
 	@echo " Cleaning Assignment 03"
 	@echo "========================================"
 	$(MAKE) -C $(ASSIGNMENT_03) clean
+	
+	@echo ""
+	@echo "========================================"
+	@echo " Cleaning Assignment 04"
+	@echo "========================================"
+	$(MAKE) -C $(ASSIGNMENT_04) clean
 
 	@echo ""
 	@echo "Cleaning common wrapper..."
