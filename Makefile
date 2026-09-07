@@ -112,7 +112,7 @@ run03: assignment_03
 
 
 .PHONY: run04
-run03: assignment_04
+run04: assignment_04
 	@echo ""
 	@echo "========================================"
 	@echo " Running Assignment 04"
