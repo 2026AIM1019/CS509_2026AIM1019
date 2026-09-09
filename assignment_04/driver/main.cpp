@@ -25,13 +25,16 @@ static const std::string PAGERANK_TESTS[5] = {
     "tests/pagerank/pagerank_50000.txt"
 };
 
+// Does this file exist and can I open it?
 static bool fileExists(const std::string& path) {
     std::ifstream f(path);
     return f.good();
 }
 
+// This function displays the test-case menu.
 static int chooseTest(const std::string& name) {
     std::cout << "\n" << name << " test cases:\n";
+    
     for (int i = 0; i < 5; ++i)
         std::cout << (i + 1) << ". Test case " << (i + 1) << "\n";
     std::cout << "Enter test case (1-5): ";
@@ -40,6 +43,7 @@ static int chooseTest(const std::string& name) {
     std::cin >> choice;
     if (!std::cin || choice < 1 || choice > 5)
         return -1;
+    
     return choice;
 }
 
@@ -87,6 +91,8 @@ static void runColoring(int testCase) {
     std::cout << "Execution time: " << ms << " ms\n";
 }
 
+
+
 static void runPageRank(int testCase) {
     const std::string& path = PAGERANK_TESTS[testCase - 1];
 
@@ -117,7 +123,7 @@ static void runPageRank(int testCase) {
         std::chrono::duration<double, std::milli>(stop - start).count();
 
     double sum = 0.0;
-    int topVertex = 0;
+    int topVertex = 0;  // The vertex with the highest PageRank value.
 
     for (int i = 0; i < g.V; ++i) {
         sum += result.rank[i];
